@@ -13,9 +13,9 @@ public class InformacionNacimiento {
     private LocalDate fechaNacimiento;
     private String edad;
 
-    public InformacionNacimiento(LocalDate fechaNacimiento, String edad) {
+    public InformacionNacimiento(LocalDate fechaNacimiento) {
         this.fechaNacimiento = fechaNacimiento;
-        this.edad = edad;
+        this.edad = LocalDate.now().getYear() - fechaNacimiento.getYear() + "";
     }
 
     public LocalDate getFechaNacimiento() {
@@ -28,10 +28,6 @@ public class InformacionNacimiento {
 
     public String getEdad() {
         return edad;
-    }
-
-    public void setEdad(String edad) {
-        this.edad = edad;
     }
 
     @Override

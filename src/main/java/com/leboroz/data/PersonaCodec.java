@@ -51,8 +51,7 @@ public class PersonaCodec implements CollectibleCodec<Persona> {
                 informacion_de_persona.getString("Hard_to_reach"),
                 informacion_de_persona.getString("Perfil_poblacional"));
         InformacionNacimiento informacionNacimiento = new InformacionNacimiento(
-                LocalDate.ofEpochDay(informacion_de_nacimiento.getLong("Fecha_de_nacimiento")),
-                informacion_de_nacimiento.getString("Edad")
+                LocalDate.ofEpochDay(informacion_de_nacimiento.getLong("Fecha_de_nacimiento"))
         );
         InformacionVivienda informacionVivienda = new InformacionVivienda(
                 informacion_de_vivienda.getString("Estado"),
