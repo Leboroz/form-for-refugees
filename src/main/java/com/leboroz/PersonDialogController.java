@@ -2,87 +2,87 @@ package com.leboroz;
 
 import com.leboroz.data.*;
 import javafx.fxml.FXML;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
+import org.controlsfx.control.textfield.CustomTextField;
 
 public class PersonDialogController {
     @FXML
     public GridPane dialogGridPane;
     @FXML
-    private TextField nrc;
+    private CustomTextField nrc;
     @FXML
-    private TextField tipoID;
+    private ComboBox<String> tipoID;
     @FXML
-    private TextField nombres;
+    private CustomTextField nombres;
     @FXML
-    private TextField sexo;
+    private ComboBox<String> sexo;
     @FXML
-    private TextField telefonoFijo;
+    private CustomTextField telefonoFijo;
     @FXML
-    private TextField id;
+    private CustomTextField id;
     @FXML
-    private TextField nacionalidad;
+    private ComboBox<String> nacionalidad;
     @FXML
-    private TextField apellidos;
+    private CustomTextField apellidos;
     @FXML
-    private TextField numeroPersonas;
+    private CustomTextField numeroPersonas;
     @FXML
-    private TextField celular;
+    private CustomTextField celular;
     @FXML
-    private TextField hardToReach;
+    private ComboBox<String> hardToReach;
     @FXML
-    private TextField perfilPoblacional;
+    private ComboBox<String> perfilPoblacional;
     @FXML
     private DatePicker fechaNacimiento;
     @FXML
-    private TextField edad;
+    private CustomTextField edad;
     @FXML
-    private TextField estado;
+    private ComboBox<String> estado;
     @FXML
-    private TextField municipio;
+    private CustomTextField municipio;
     @FXML
-    private TextField parroquia;
+    private CustomTextField parroquia;
     @FXML
-    private TextField diaAtencion;
+    private CustomTextField diaAtencion;
     @FXML
-    private TextField mesAtencion;
+    private CustomTextField mesAtencion;
     @FXML
-    private TextField anoAtencion;
+    private CustomTextField anoAtencion;
     @FXML
-    private TextField coreCompetency;
+    private ComboBox<String> coreCompetency;
     @FXML
-    private TextField indicador;
+    private ComboBox<String> indicador;
     @FXML
-    private TextField servicio;
+    private ComboBox<String> servicio;
     @FXML
-    private TextField comentario;
+    private TextArea comentario;
     @FXML
-    private TextField covid;
+    private ComboBox<String> covid;
 
 
     public Persona getPersona() {
         InformacionPersona informacionPersona = new InformacionPersona(
                 nrc.getText(),
-                tipoID.getText(),
+                tipoID.getValue(),
                 nombres.getText(),
-                sexo.getText(),
+                sexo.getValue(),
                 telefonoFijo.getText(),
                 id.getText(),
-                nacionalidad.getText(),
+                nacionalidad.getValue(),
                 apellidos.getText(),
                 numeroPersonas.getText(),
                 celular.getText(),
-                hardToReach.getText(),
-                perfilPoblacional.getText()
+                hardToReach.getValue(),
+                perfilPoblacional.getValue()
         );
         InformacionNacimiento informacionNacimiento = new InformacionNacimiento(
-                fechaNacimiento.getValue(),
-                edad.getText()
+                fechaNacimiento.getValue()
         );
         InformacionVivienda informacionVivienda = new InformacionVivienda(
-                estado.getText(),
+                estado.getValue(),
                 municipio.getText(),
                 parroquia.getText()
         );
@@ -90,11 +90,11 @@ public class PersonDialogController {
                 diaAtencion.getText(),
                 mesAtencion.getText(),
                 anoAtencion.getText(),
-                coreCompetency.getText(),
-                indicador.getText(),
-                servicio.getText(),
+                coreCompetency.getValue(),
+                indicador.getValue(),
+                servicio.getValue(),
                 comentario.getText(),
-                covid.getText()
+                covid.getValue()
         );
         return new Persona(informacionPersona, informacionNacimiento, informacionVivienda, otros);
     }
