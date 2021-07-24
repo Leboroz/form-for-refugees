@@ -2,10 +2,11 @@ package com.leboroz;
 
 import com.leboroz.data.*;
 import javafx.fxml.FXML;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.util.Callback;
 import org.controlsfx.control.textfield.CustomTextField;
 
 public class PersonDialogController {
@@ -62,6 +63,63 @@ public class PersonDialogController {
     @FXML
     private ComboBox<String> covid;
 
+    public void initialize() {
+
+
+        tipoID.getItems().setAll("Cédula de Identidad", "Partida de Nacimiento", "Targeta de Identidad", "No Registrado", "Pasaporte", "Documento Provisional", "Cédula de Extrangero", "Carné PTH", "Registro Civil", "Apátrida");
+        final Callback<ListView<String>, ListCell<String>> cellFactory = (final ListView<String> p) -> new ListCell<>() {
+            @Override
+            protected void updateItem(final String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (item != null) {
+                    setText(item);
+                    ImageView imageView = new ImageView(new Image("icon.png"));
+                    imageView.setFitHeight(50);
+                    imageView.setFitWidth(50);
+                    setGraphic(imageView);
+                }
+            }
+        };
+        tipoID.setCellFactory(cellFactory);
+        tipoID.setButtonCell(cellFactory.call(null));
+        nacionalidad.getItems().setAll("Venezuela", "Colombia", "Brazil", "Peru", "Ecuador", "Otros");
+        sexo.getItems().setAll("Masculino", "Femenino", "Otros");
+        hardToReach.getItems().setAll("si", "no");
+        perfilPoblacional.getItems().setAll("Desplazado Interno(IDP)", "Poblacion Local(Host Community)", "Refugiado(no Venezolano)", "Retornado(Returnee)", "no affectado por desplazamiento", "Población Indigena");
+        estado.getItems().setAll(
+                "Amazonas",
+                "Anzoategui",
+                "Estado Amazonas",
+                "Anzoategui",
+                "Apure",
+                "Aragua",
+                "Barinas",
+                "Bolívar",
+                "Carabobo",
+                "Cojedes",
+                "Delta Amacuro",
+                "Distrito Capital",
+                "Falcón",
+                "Guárico",
+                "Lara",
+                "Mérida",
+                "Miranda",
+                "Monagas",
+                "Nueva Esparta",
+                "Portuguesa",
+                "Sucre",
+                "Táchira",
+                "Trujillo",
+                "Vargas",
+                "Yaracuy",
+                "Zulia"
+        );
+        coreCompetency.getItems().setAll("WASH");
+        covid.getItems().setAll("si", "no");
+
+    }
+    /*
+     */
 
     public Persona getPersona() {
         InformacionPersona informacionPersona = new InformacionPersona(

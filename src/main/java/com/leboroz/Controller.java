@@ -3,16 +3,23 @@ package com.leboroz;
 import com.leboroz.data.InformacionPersona;
 import com.leboroz.data.MongoCon;
 import com.leboroz.data.Persona;
+import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.paint.Color;
+import javafx.stage.Stage;
+import javafx.util.Duration;
+import org.controlsfx.control.textfield.CustomTextField;
 import org.controlsfx.glyphfont.FontAwesome;
 import org.controlsfx.glyphfont.Glyph;
 
@@ -27,7 +34,13 @@ public class Controller {
     @FXML
     public ToolBar toolBar;
     @FXML
-    private TextField searchTextField;
+    private MenuBar mainBar;
+    @FXML
+    private Button min;
+    @FXML
+    private Button close;
+    @FXML
+    private CustomTextField searchTextField;
     @FXML
     private Label hardToReach;
     @FXML
@@ -59,23 +72,30 @@ public class Controller {
     private List<Persona> personas;
     private ObservableList<InformacionPersona> informacionPersonas;
 
-    public void initialize(){
-        Glyph addGlyph = Glyph.create("FontAwesome|" + FontAwesome.Glyph.PLUS_SQUARE.name()).size(15.0);
-        Glyph deleteGlyph = Glyph.create("FontAwesome|" + FontAwesome.Glyph.TRASH.name()).size(15.0);
+    public void initialize() {
+        Glyph addGlyph = Glyph.create("FontAwesome|" + FontAwesome.Glyph.PLUS_SQUARE.name()).size(30.0);
+        addGlyph.setPadding(new Insets(0.0, 5.0, 0.0, 5.0));
+        Glyph deleteGlyph = Glyph.create("FontAwesome|" + FontAwesome.Glyph.TRASH.name()).size(30.0);
+        deleteGlyph.setPadding(new Insets(0.0, 5.0, 0.0, 5.0));
+        addGlyph.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> handleClickDialog());
 
-        addGlyph.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-            handleClickDialog();
+        deleteGlyph.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> HandleClickDelete());
+        close.setGraphic(Glyph.create("FontAwesome|" + FontAwesome.Glyph.CLOSE));
+        close.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> Platform.exit());
+        min.setGraphic(Glyph.create("FontAwesome|" + FontAwesome.Glyph.MINUS));
+        min.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setIconified(true);
         });
 
-        deleteGlyph.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-            HandleClickDelete();
-        });
 
         toolBar.getItems().addAll(addGlyph, deleteGlyph);
         personas = MongoCon.getPersonas();
-        System.out.println(personas);
-        informacionPersonas = FXCollections.observableArrayList(personas.stream().map(Persona::getInformacionPersona).collect(Collectors.toList()));
+        if (personas != null) {
+            informacionPersonas = FXCollections.observableArrayList(personas.stream().map(Persona::getInformacionPersona).collect(Collectors.toList()));
+        }
         personasTable.setItems(informacionPersonas);
+        personasTable.getSelectionModel().selectFirst();
         searchTextField.textProperty().addListener((observableValue, s, t1) -> {
             if (!t1.equals("")) {
                 ObservableList<InformacionPersona> FilteredList = FXCollections.observableArrayList();
@@ -127,6 +147,12 @@ public class Controller {
         fxmlLoader.setLocation(getClass().getResource("views/personDialog.fxml"));
         try {
             dialog.getDialogPane().setContent(fxmlLoader.load());
+            Platform.runLater(() -> {
+                dialog.setY(0.0);
+                TranslateTransition tt = new TranslateTransition(Duration.millis(3000), dialog.getGraphic());
+                tt.setByY(400);
+                tt.play();
+            });
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -136,19 +162,23 @@ public class Controller {
         PersonDialogController personDialogController = fxmlLoader.getController();
         BTN_OK.addEventFilter(ActionEvent.ACTION, actionEvent -> {
             ObservableList<Node> children = personDialogController.dialogGridPane.getChildren();
-            for(Node child : children){
-                if (child.getClass() == TextField.class  && ((TextField) child).getText().equals("")){
-                    Alert alert = new Alert(Alert.AlertType.WARNING);
-                    alert.setContentText("Faltan campos por rellenar");
-                    alert.show();
-                    actionEvent.consume();
-                    break;
+            boolean fieldsMissing = false;
+            for (Node child : children) {
+                if (child.getClass() == CustomTextField.class && ((CustomTextField) child).getText().equals("") ||
+                        child.getClass() == ComboBox.class && ((ComboBox) child).getValue() == null ||
+                        child.getClass() == DatePicker.class && ((DatePicker) child).getValue() == null
+                ) {
+                    DropShadow dropShadow = new DropShadow();
+                    dropShadow.setColor(Color.RED);
+                    child.setEffect(dropShadow);
+                    fieldsMissing = true;
                 }
             }
+            if (fieldsMissing) {
+                actionEvent.consume();
+            }
         });
-        Platform.runLater(() -> {
-            dialog.setY(10.0);
-        });
+
 
         Optional<ButtonType> result = dialog.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
@@ -186,5 +216,21 @@ public class Controller {
         celular.setText("");
         hardToReach.setText("");
         perfilPoblacional.setText("");
+    }
+
+    private double x = 0, y = 0;
+
+    @FXML
+    public void handleDrag(MouseEvent mouseEvent) {
+        Stage window = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
+        window.setX(mouseEvent.getScreenX() - x);
+        window.setY(mouseEvent.getScreenY() - y);
+
+    }
+
+    @FXML
+    public void handleBarClicked(MouseEvent mouseEvent) {
+        x = mouseEvent.getX();
+        y = mouseEvent.getY();
     }
 }

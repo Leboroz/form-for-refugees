@@ -19,27 +19,47 @@ import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
 
 
 public final class MongoCon {
-    private static final ConnectionString CONNECTION_STRING = new ConnectionString("mongodb+srv://Leboroz:Leboroz@cluster0.6eihu.mongodb.net/BaseDatos?retryWrites=true&w=majority");
-    private static final CodecRegistry POJO_CODEC_REGISTRY = fromRegistries(MongoClientSettings.getDefaultCodecRegistry(), fromCodecs(new PersonaCodec()));
-    private static final MongoClientSettings SETTINGS = MongoClientSettings.builder()
-            .applyConnectionString(CONNECTION_STRING)
-            .build();
+    private static ConnectionString CONNECTION_STRING;
+    private static CodecRegistry POJO_CODEC_REGISTRY;
+    private static MongoClientSettings SETTINGS;
+
+
+    static {
+        try {
+            CONNECTION_STRING = new ConnectionString("mongodb+srv://Leboroz:Leboroz@cluster0.6eihu.mongodb.net/BaseDatos?retryWrites=true&w=majority");
+            POJO_CODEC_REGISTRY = fromRegistries(MongoClientSettings.getDefaultCodecRegistry(), fromCodecs(new PersonaCodec()));
+            SETTINGS = MongoClientSettings
+                    .builder()
+                    .applyConnectionString(CONNECTION_STRING)
+                    .build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("La base de datos no esta connectada");
+            alert.show();
+        }
+
+    }
 
     public static void create(Persona persona) {
         MongoCollection<Persona> personas = connect();
-        assert personas != null;
-        personas.insertOne(persona);
+        if (personas != null) {
+            personas.insertOne(persona);
+        }
     }
-    public static List<Persona> getPersonas(){
+
+    public static List<Persona> getPersonas() {
         MongoCollection<Persona> personas = connect();
-        assert personas != null;
-        return personas.find().into(new ArrayList<>());
+        return personas != null ? personas.find().into(new ArrayList<>()) : null;
     }
+
     public static boolean delete(Persona persona) {
         MongoCollection<Persona> personas = connect();
         try {
-            assert personas != null;
-            Persona oneAndDelete = personas.findOneAndDelete(eq("_id", persona.getID()));
+            Persona oneAndDelete = null;
+            if (personas != null) {
+                oneAndDelete = personas.findOneAndDelete(eq("_id", persona.getID()));
+            }
             return oneAndDelete != null;
         } catch (Exception e) {
             e.printStackTrace();

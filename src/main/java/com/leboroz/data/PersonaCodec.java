@@ -8,7 +8,7 @@ import java.time.LocalDate;
 
 public class PersonaCodec implements CollectibleCodec<Persona> {
 
-    private Codec<Document> documentCodec;
+    private final Codec<Document> documentCodec;
 
     public PersonaCodec() {
         super();
@@ -48,8 +48,8 @@ public class PersonaCodec implements CollectibleCodec<Persona> {
                 informacion_de_persona.getString("Apellidos"),
                 informacion_de_persona.getString("#_de_personas_en_el_hogar"),
                 informacion_de_persona.getString("Celular"),
-                informacion_de_persona.getString("Hard_to_reach"),
-                informacion_de_persona.getString("Perfil_poblacional"));
+                informacion_de_persona.getString("Hard_to_Reach"),
+                informacion_de_persona.getString("Perfil_poblacionaltem"));
         InformacionNacimiento informacionNacimiento = new InformacionNacimiento(
                 LocalDate.ofEpochDay(informacion_de_nacimiento.getLong("Fecha_de_nacimiento"))
         );

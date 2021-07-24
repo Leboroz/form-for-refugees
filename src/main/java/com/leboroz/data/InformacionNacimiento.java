@@ -1,17 +1,11 @@
 package com.leboroz.data;
 
-import org.bson.BsonDocument;
-import org.bson.BsonDocumentReader;
-import org.bson.BsonDocumentWriter;
-import org.bson.Document;
-import org.bson.codecs.jsr310.LocalDateCodec;
-
 import java.time.LocalDate;
 import java.util.Objects;
 
 public class InformacionNacimiento {
     private LocalDate fechaNacimiento;
-    private String edad;
+    private final String edad;
 
     public InformacionNacimiento(LocalDate fechaNacimiento) {
         this.fechaNacimiento = fechaNacimiento;
