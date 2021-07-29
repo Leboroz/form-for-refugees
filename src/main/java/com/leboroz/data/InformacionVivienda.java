@@ -40,11 +40,9 @@ public class InformacionVivienda {
 
     @Override
     public String toString() {
-        return "InformacionVivienda{" +
-                "estado='" + estado + '\'' +
-                ", municipio='" + municipio + '\'' +
-                ", parroquia='" + parroquia + '\'' +
-                '}';
+        return '\'' + estado + "', '" +
+                municipio + "', '" +
+                parroquia + "', ";
     }
 
     @Override

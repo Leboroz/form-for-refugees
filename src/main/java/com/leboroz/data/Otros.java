@@ -90,16 +90,14 @@ public class Otros {
 
     @Override
     public String toString() {
-        return "Otros{" +
-                "diaAtencion='" + diaAtencion + '\'' +
-                ", mesAtencion='" + mesAtencion + '\'' +
-                ", añoAtencion='" + añoAtencion + '\'' +
-                ", coreCompetency='" + coreCompetency + '\'' +
-                ", indicador='" + indicador + '\'' +
-                ", servicio='" + servicio + '\'' +
-                ", comentario='" + comentario + '\'' +
-                ", covid='" + covid + '\'' +
-                '}';
+        return '\'' + diaAtencion + "', '" +
+                mesAtencion + "', '" +
+                añoAtencion + "', '" +
+                coreCompetency + "', '" +
+                indicador + "', '" +
+                servicio + "', '" +
+                comentario + "', '" +
+                covid + '\'';
     }
 
     @Override

@@ -4,6 +4,8 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.Color?>
 <?import org.controlsfx.control.textfield.CustomTextField?>
@@ -14,23 +16,26 @@
     <top>
         <VBox>
             <children>
-                <AnchorPane maxHeight="30.0" minHeight="30.0" prefHeight="30.0">
+                <AnchorPane maxHeight="30.0" minHeight="30.0" prefHeight="30.0" style="-fx-background-color: white;">
                     <children>
                         <MenuBar fx:id="mainBar" onMouseDragged="#handleDrag" onMousePressed="#handleBarClicked"
-                                 AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                                 AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="0.0"
                                  AnchorPane.topAnchor="0.0">
                             <menus>
-                                <Menu mnemonicParsing="false" text="File">
+                                <Menu mnemonicParsing="false" text="Archivo">
                                     <items>
+                                        <MenuItem mnemonicParsing="false" onAction="#handleAbrir" text="Abrir"/>
+                                        <MenuItem mnemonicParsing="false" onAction="#handlePoblar" text="poblar"/>
+                                        <MenuItem mnemonicParsing="false" onAction="#handleGuardar" text="Guardar"/>
                                         <MenuItem mnemonicParsing="false" text="Close"/>
                                     </items>
                                 </Menu>
-                                <Menu mnemonicParsing="false" text="Edit">
+                                <Menu mnemonicParsing="false" text="Editar">
                                     <items>
                                         <MenuItem mnemonicParsing="false" text="Delete"/>
                                     </items>
                                 </Menu>
-                                <Menu mnemonicParsing="false" text="Help">
+                                <Menu mnemonicParsing="false" text="Ayuda">
                                     <items>
                                         <MenuItem mnemonicParsing="false" text="About"/>
                                     </items>
@@ -44,6 +49,12 @@
                                 <Button fx:id="close" layoutX="62.0" layoutY="10.0" mnemonicParsing="false"/>
                             </children>
                         </HBox>
+                        <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true"
+                                   AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="2.5" AnchorPane.topAnchor="2.5">
+                            <image>
+                                <Image url="@../../../icon.png"/>
+                            </image>
+                        </ImageView>
                     </children>
                 </AnchorPane>
                 <ToolBar fx:id="toolBar" prefHeight="40.0" prefWidth="200.0">
@@ -89,15 +100,15 @@
                     </columnResizePolicy>
                 </TableView>
                 <CustomTextField fx:id="searchTextField" prefHeight="26.0" prefWidth="397.0"
-                                 AnchorPane.leftAnchor="15.0"
-                                 AnchorPane.topAnchor="15.0" GridPane.columnIndex="1" GridPane.hgrow="NEVER"
-                                 GridPane.vgrow="NEVER">
+                                 AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="15.0" GridPane.columnIndex="1"
+                                 GridPane.hgrow="NEVER" GridPane.vgrow="NEVER">
                     <promptText>Buscar</promptText>
                 </CustomTextField>
                 <Pane layoutX="454.0" layoutY="52.0" prefHeight="398.0" prefWidth="531.0" AnchorPane.bottomAnchor="0.0"
                       AnchorPane.leftAnchor="454.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="52.0">
                     <children>
-                        <GridPane alignment="CENTER" hgap="10.0" prefHeight="307.0" prefWidth="531.0" vgap="10.0">
+                        <GridPane alignment="CENTER" hgap="10.0" prefHeight="307.0" prefWidth="531.0"
+                                  styleClass="grid-pane" vgap="10.0">
                             <columnConstraints>
                                 <ColumnConstraints halignment="RIGHT" hgrow="NEVER" minWidth="10.0" prefWidth="150.0"/>
                                 <ColumnConstraints halignment="LEFT" hgrow="NEVER" minWidth="10.0" prefWidth="150.0"/>
@@ -121,12 +132,12 @@
                                                 vgrow="SOMETIMES"/>
                             </rowConstraints>
                             <children>
-                                <Label text="Codigo NRC del beneficario">
+                                <Label text="Codigo NRC">
                                     <GridPane.margin>
                                         <Insets/>
                                     </GridPane.margin>
                                 </Label>
-                                <Label text="N de Identificacion" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
+                                <Label text="# de Identificacion" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
                                 <Label text="Tipo de identificacion" GridPane.rowIndex="1"/>
                                 <Label text="Nacionalidad" GridPane.rowIndex="3"/>
                                 <Label text="Nombres" GridPane.rowIndex="2"/>

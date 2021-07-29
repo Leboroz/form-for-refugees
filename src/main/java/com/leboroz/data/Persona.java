@@ -1,11 +1,11 @@
 package com.leboroz.data;
 
-import org.bson.types.ObjectId;
+import org.postgresql.util.PGobject;
 
 import java.util.Objects;
 
 public class Persona {
-    private ObjectId id;
+    private PGobject id;
     private InformacionPersona informacionPersona;
     private InformacionNacimiento informacionNacimiento;
     private InformacionVivienda informacionVivienda;
@@ -52,11 +52,11 @@ public class Persona {
         this.otros = otros;
     }
 
-    public ObjectId getID() {
+    public PGobject getID() {
         return id;
     }
 
-    public void setId(ObjectId id) {
+    public void setId(PGobject id) {
         this.id = id;
     }
 
@@ -76,11 +76,11 @@ public class Persona {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Persona persona = (Persona) o;
-        return Objects.equals(informacionPersona, persona.informacionPersona) && Objects.equals(informacionNacimiento, persona.informacionNacimiento) && Objects.equals(informacionVivienda, persona.informacionVivienda) && Objects.equals(otros, persona.otros);
+        return Objects.equals(informacionPersona.getCedula(), persona.informacionPersona.getCedula());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(informacionPersona, informacionNacimiento, informacionVivienda, otros);
+        return Objects.hash(informacionPersona);
     }
 }

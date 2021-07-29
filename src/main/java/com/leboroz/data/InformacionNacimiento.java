@@ -7,6 +7,11 @@ public class InformacionNacimiento {
     private LocalDate fechaNacimiento;
     private final String edad;
 
+    public InformacionNacimiento(LocalDate fechaNacimiento, String edad) {
+        this.fechaNacimiento = fechaNacimiento;
+        this.edad = edad;
+    }
+
     public InformacionNacimiento(LocalDate fechaNacimiento) {
         this.fechaNacimiento = fechaNacimiento;
         this.edad = LocalDate.now().getYear() - fechaNacimiento.getYear() + "";
@@ -26,10 +31,9 @@ public class InformacionNacimiento {
 
     @Override
     public String toString() {
-        return "InformacionNacimiento{" +
-                "fechaNacimiento=" + fechaNacimiento +
-                ", edad='" + edad + '\'' +
-                '}';
+        return "date '" +
+                fechaNacimiento.toString() + '\'' + ", '" +
+                edad + "', ";
     }
 
     @Override

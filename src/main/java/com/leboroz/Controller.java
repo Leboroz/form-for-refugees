@@ -1,8 +1,8 @@
 package com.leboroz;
 
 import com.leboroz.data.InformacionPersona;
-import com.leboroz.data.MongoCon;
 import com.leboroz.data.Persona;
+import com.leboroz.data.PostgresCon;
 import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -17,16 +17,19 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.controlsfx.control.textfield.CustomTextField;
 import org.controlsfx.glyphfont.FontAwesome;
 import org.controlsfx.glyphfont.Glyph;
 
-import java.io.IOException;
+import java.io.*;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 
@@ -69,6 +72,7 @@ public class Controller {
     private BorderPane primary;
     @FXML
     private TableView<InformacionPersona> personasTable;
+
     private List<Persona> personas;
     private ObservableList<InformacionPersona> informacionPersonas;
 
@@ -90,10 +94,10 @@ public class Controller {
 
 
         toolBar.getItems().addAll(addGlyph, deleteGlyph);
-        personas = MongoCon.getPersonas();
-        if (personas != null) {
+//        MongoCon.connect(primary);
+        personas = PostgresCon.getPersonas();
+        if (personas != null)
             informacionPersonas = FXCollections.observableArrayList(personas.stream().map(Persona::getInformacionPersona).collect(Collectors.toList()));
-        }
         personasTable.setItems(informacionPersonas);
         personasTable.getSelectionModel().selectFirst();
         searchTextField.textProperty().addListener((observableValue, s, t1) -> {
@@ -120,7 +124,7 @@ public class Controller {
         int focusedIndex = personasTable.getSelectionModel().getFocusedIndex();
         if (personasTable.getSelectionModel().isSelected(focusedIndex)) {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setContentText("Esta seguro");
+            alert.setContentText("Confirme la operación");
             Optional<ButtonType> optional = alert.showAndWait();
             if (optional.isPresent() && optional.get().equals(ButtonType.OK) ) {
                 InformacionPersona informacionPersona = personasTable.getSelectionModel().getSelectedItem();
@@ -130,7 +134,7 @@ public class Controller {
                         selectedPersona = persona;
                     }
                 }
-                if(MongoCon.delete(selectedPersona)){
+                if (PostgresCon.delete(selectedPersona)) {
                     informacionPersonas.remove(selectedPersona.getInformacionPersona());
                     clearFields();
                 }
@@ -183,12 +187,14 @@ public class Controller {
         Optional<ButtonType> result = dialog.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
             Persona persona = personDialogController.getPersona();
-            MongoCon.create(persona);
+            PostgresCon.create(persona);
+            personas.add(persona);
             informacionPersonas.add(persona.getInformacionPersona());
         }
     }
+
     @FXML
-    public void handleClickTableItem() {
+    public void handleClickTableItem() throws NullPointerException {
         InformacionPersona informacionPersona = personasTable.getSelectionModel().getSelectedItem();
         nrc.setText(informacionPersona.getNrc());
         tipoIdentificacion.setText(informacionPersona.getTipoID());
@@ -232,5 +238,56 @@ public class Controller {
     public void handleBarClicked(MouseEvent mouseEvent) {
         x = mouseEvent.getX();
         y = mouseEvent.getY();
+    }
+
+    @FXML
+    public void handleAbrir(ActionEvent actionEvent) throws IOException {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Abrir archivo csv");
+        fileChooser.getExtensionFilters().setAll(
+                new FileChooser.ExtensionFilter("Text(.csv)", "*.csv")
+        );
+        File file = fileChooser.showOpenDialog(((MenuItem) actionEvent.getSource()).getParentPopup().getOwnerWindow());
+        List<String> lines;
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+            lines = br.lines().collect(Collectors.toList());
+        }
+        Pattern pattern = Pattern.compile("([\\w\\d]+);");
+        for (String s : lines) {
+            Matcher matcher = pattern.matcher(s);
+            while (matcher.find()) {
+                System.out.println("group: " + matcher.group());
+            }
+        }
+
+//                if (!personas.contains(persona)) {
+//                    if(MongoCon.create(persona)){
+//                        personas.add(persona);
+//                        informacionPersonas.add(persona.getInformacionPersona());
+//                    }
+//                }
+
+    }
+
+    @FXML
+    public void handleGuardar(ActionEvent actionEvent) throws IOException {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Guardar archivo csv");
+        fileChooser.getExtensionFilters().setAll(
+                new FileChooser.ExtensionFilter("Text(.csv)", "*.csv")
+        );
+        File file = fileChooser.showSaveDialog(((MenuItem) actionEvent.getSource()).getParentPopup().getOwnerWindow());
+        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file))) {
+            for (Persona persona : personas) {
+                bufferedWriter.write(
+                        persona.getInformacionPersona().toString() + persona.getInformacionNacimiento().toString() + persona.getInformacionVivienda().toString() + persona.getOtros().toString()
+                );
+                bufferedWriter.newLine();
+            }
+        }
+    }
+
+    public void handlePoblar(ActionEvent actionEvent) {
+
     }
 }

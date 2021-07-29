@@ -1,23 +1,26 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap');
 
 * {
-    -primary: #334257;
-    -secondary: #476072;
-    -tertiary: #548CA8;
+    -primary: white;
+    -secondary: #CD113B;
+    -tertiary: #FF7600;
     -quaternary: #EEEEEE;
 }
 
 .root {
     -fx-background-color: -primary;
-    -fx-font-family: "Montserrat";
+    -fx-font-family: Arial;
 }
 
 .label {
-    -fx-text-fill: -quaternary;
+    -fx-text-fill: white;
+}
+
+.grid-pane .label {
+    -fx-text-fill: black;
 }
 
 .text-field {
-    -fx-text-fill: -secondary;
+    -fx-text-fill: black;
     -fx-background-color: -tertiary, -primary, -primary;
     -fx-background-insets: 0 -1 -1 -1, 0 0 0 0, 0 -1 3 -1;
 }
@@ -25,13 +28,13 @@
 .text-field:focused {
     -fx-background-color: -tertiary, -primary, -primary;
     -fx-background-insets: 0 -1 -1 -1, 0 0 0 0, 0 -1 3 -1;
+
 }
 
 .button {
     -fx-background-radius: 50%;
     -fx-background-insets: 0;
     -fx-background-color: -tertiary;
-
 }
 
 .h-box .button:hover {
@@ -42,9 +45,21 @@
     -fx-background-color: -primary;
 }
 
+.tool-bar .label {
+    -fx-text-fill: -tertiary;
+}
+
 .menu-bar {
     -fx-background-insets: 0;
     -fx-background-color: -tertiary;
+}
+
+.menu-bar .label {
+    -fx-text-fill: white;
+}
+
+.menu-bar .menu {
+    -fx-text-fill: -tertiary;
 }
 
 .table-view {

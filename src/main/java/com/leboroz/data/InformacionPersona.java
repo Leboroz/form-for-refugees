@@ -18,6 +18,9 @@ public class InformacionPersona {
     private String hardToReach;
     private String perfilPoblacional;
 
+    public InformacionPersona() {
+    }
+
     public InformacionPersona(String nrc, String tipoID, String nombres, String sexo, String telefonoFijo, String cedula, String nacionalidad, String apellidos, String numeroPersonas, String celular, String hardToReach, String perfilPoblacional) {
         this.nrc = nrc;
         this.tipoID = tipoID;
@@ -131,20 +134,18 @@ public class InformacionPersona {
 
     @Override
     public String toString() {
-        return "InformacionPersona{" +
-                "nrc='" + nrc + '\'' +
-                ", tipoID='" + tipoID + '\'' +
-                ", nombres=" + nombres +
-                ", sexo='" + sexo + '\'' +
-                ", telefonoFijo='" + telefonoFijo + '\'' +
-                ", cedula=" + cedula +
-                ", nacionalidad='" + nacionalidad + '\'' +
-                ", apellidos='" + apellidos + '\'' +
-                ", numeroPersonas='" + numeroPersonas + '\'' +
-                ", celular='" + celular + '\'' +
-                ", hardToReach='" + hardToReach + '\'' +
-                ", perfilPoblacional='" + perfilPoblacional + '\'' +
-                '}';
+        return '\'' + nrc + "', '" +
+                tipoID + "', '" +
+                nombres.get() + "', '" +
+                sexo + "', '" +
+                telefonoFijo + "', '" +
+                cedula.get() + "', '" +
+                nacionalidad + "', '" +
+                apellidos + "', '" +
+                numeroPersonas + "', '" +
+                celular + "', '" +
+                hardToReach + "', '" +
+                perfilPoblacional + "', ";
     }
 
     @Override
