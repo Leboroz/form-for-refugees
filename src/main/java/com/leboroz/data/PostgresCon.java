@@ -16,11 +16,17 @@ public final class PostgresCon {
         connect();
     }
 
-    private static Connection connection;
-    private static Properties properties;
+    private static final Properties properties;
+
+    static {
+        properties = new Properties();
+        properties.setProperty("user", "postgres");
+        properties.setProperty("password", "23738070l");
+    }
 
     public static boolean create(Persona persona) {
-        try (Statement statement = connection.createStatement()) {
+        try (Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:7777/basedatos", properties);
+             Statement statement = connection.createStatement()) {
             return statement.execute("INSERT INTO personas(" +
                     "nrc," +
                     "tipoid," +
@@ -61,7 +67,9 @@ public final class PostgresCon {
     }
 
     public static List<Persona> getPersonas() {
-        try (Statement statement = connection.createStatement()) {
+
+        try (Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:7777/basedatos", properties);
+             Statement statement = connection.createStatement()) {
             ResultSet resultSet = statement.executeQuery("SELECT * FROM personas");
             List<Persona> personaList = new ArrayList<>();
             while (resultSet.next()) {
@@ -129,7 +137,9 @@ public final class PostgresCon {
     }
 
     public static boolean delete(Persona persona) {
-        try (Statement statement = connection.createStatement()) {
+
+        try (Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:7777/basedatos", properties);
+             Statement statement = connection.createStatement()) {
             return statement.execute("DELETE FROM personas " +
                     "WHERE cedula='" + persona.getInformacionPersona().getCedula() + "'");
         } catch (SQLException throwables) {
@@ -139,12 +149,11 @@ public final class PostgresCon {
     }
 
     public static void connect() {
-        properties = new Properties();
-        properties.setProperty("user", "postgres");
-        properties.setProperty("password", "23738070l");
-        try {
-            connection = DriverManager.getConnection("jdbc:postgresql://localhost:7777/basedatos", properties);
-            Statement statement = connection.createStatement();
+
+        try (Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:7777/basedatos", properties);
+             Statement statement = connection.createStatement()
+        ) {
+
 
 //            String sql = "SELECT * FROM person";
 //            ResultSet resultSet = statement.executeQuery(sql);

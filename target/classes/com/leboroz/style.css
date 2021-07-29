@@ -44,6 +44,7 @@
 .tool-bar {
     -fx-background-color: -primary;
 }
+
 .tool-bar .label {
     -fx-text-fill: -tertiary;
 }
@@ -52,7 +53,8 @@
     -fx-background-insets: 0;
     -fx-background-color: -tertiary;
 }
-.menu-bar .label{
+
+.menu-bar .label {
     -fx-text-fill: white;
 }
 
